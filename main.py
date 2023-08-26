@@ -26,19 +26,30 @@ def calculate_bmi():
         weight = float(weight_entry.get())
         height = float(height_entry.get()) / 100
         if weight == 0:
-            result_label.config(text="Weight can't be zero!")
+            BMI_label.config(text="Weight can't be zero!")
             return
         bmi = round(weight / (height * height), 2)
         bmi_category = classify_bmi(bmi)
-        result_label.config(text=f"Your BMI is {bmi}. \nYou are {bmi_category}.")
+        normal_weight = round(22 * (height*height), 2)
+        lose_weight = abs(round(normal_weight-weight,2))
+
+        if normal_weight > weight:
+            message = "You need to gain"
+        else:
+            message = "You have to lose"
+
+        BMI_label.config(text=f"Your BMI is {bmi}.")
+        Class_label.config(text=f"You are {bmi_category}.")
+        normal_label.config(text=f"Your normal weight : {normal_weight}.", fg="green")
+        lose_label.config(text=f"{message} {lose_weight} kilos!", fg="red")
     except ValueError:
-        result_label.config(text="Enter a valid number!")
+        BMI_label.config(text="Enter a valid number!")
     except ZeroDivisionError:
-        result_label.config(text="Height can't be zero!")
+        BMI_label.config(text="Height can't be zero!")
 
 window = Tk()
 window.title("BMI Calculator")
-window.minsize(width=250, height=250)
+window.minsize(width=250, height=270)
 window.iconbitmap("C:/Users/okana/Masaüstü/icon.ico")
 
 weight_label = Label(window, text="Enter Your Weight (kg)")
@@ -56,7 +67,17 @@ height_entry.pack()
 calculate_button = Button(window, text="Calculate", command=calculate_bmi)
 calculate_button.pack(pady=10)
 
-result_label = Label(window, text="Click the button to calculate")
-result_label.pack()
+BMI_label = Label(window, text="Click the button to calculate!")
+BMI_label.pack()
+
+Class_label = Label(window, text="")
+Class_label.pack()
+
+normal_label = Label(window, text="", fg="green")
+normal_label.pack()
+
+lose_label = Label(window, text="", fg="red")
+lose_label.pack()
+
 
 window.mainloop()
